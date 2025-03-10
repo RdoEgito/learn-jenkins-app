@@ -14,6 +14,7 @@ pipeline {
                 sh '''
                     echo "AWS stage"
                     aws --version
+                    aws s3 ls
                 '''
             }
         }
