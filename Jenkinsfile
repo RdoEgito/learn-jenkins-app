@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        REACT_APP_VERSION = "1.0.$BUILD_ID"
+        AWS_DEFAULT_REGION = 'sa-east-1'
+    }
 
     stages {
         stage('Build') {
