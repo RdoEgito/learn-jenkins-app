@@ -23,6 +23,23 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+
+            steps {
+                sh '''
+                    echo "Test stage"
+                    test -f build/index.html
+                    npm test
+                '''
+            }
+        }
+
         stage('AWS') {
             agent {
                 docker {
@@ -41,26 +58,9 @@ pipeline {
                     echo 'AWS stage'
                     sh '''
                         aws --version
-                        aws s3 sync buid s3://$AWS_S3_BUCKET
+                        aws s3 sync build s3://$AWS_S3_BUCKET
                     '''
                 }
-            }
-        }
-
-        stage('Test') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
-
-            steps {
-                sh '''
-                    echo "Test stage"
-                    test -f build/index.html
-                    npm test
-                '''
             }
         }
     }
