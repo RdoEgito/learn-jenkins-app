@@ -1,6 +1,7 @@
 pipeline {
     agent any
 
+
     stages {
         stage('AWS') {
             agent {
@@ -11,11 +12,13 @@ pipeline {
             }
 
             steps {
-                sh '''
-                    echo "AWS stage"
-                    aws --version
-                    aws s3 ls
-                '''
+                withCredentials([usernamePassword(credentialsId: 'my-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                    sh '''
+                        echo "AWS stage"
+                        aws --version
+                        aws s3 ls
+                    '''
+                }
             }
         }
 
